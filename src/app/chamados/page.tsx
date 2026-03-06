@@ -3,6 +3,19 @@ import { tickets } from "@/lib/mock-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
+const getStatusClass = (status: string) => {
+  if (status === "Aberto") {
+    return "bg-green-500 text-white";
+  } else if (status === "Em andamento") {
+    return "bg-yellow-500 text-black";
+  } else {
+    return "bg-blue-500 text-white";
+  }
+};
+
+const countTickets = tickets.length;
+const ticketLabel = countTickets === 1 ? "Ticket" : "Tickets";
+
 const ChamadosPage = () => {
   return (
     <div className="space-y-6 p-6">
@@ -11,6 +24,9 @@ const ChamadosPage = () => {
           <h1 className="text-3xl font-bold">Chamados</h1>
           <p className="text-muted-foreground">
             Gerencie os tickets de suporte
+          </p>
+          <p className="text-muted-foreground">
+            {countTickets} {ticketLabel}
           </p>
         </div>
 
@@ -37,7 +53,9 @@ const ChamadosPage = () => {
             <span>{ticket.titulo}</span>
             <span>{ticket.cliente}</span>
             <span>
-              <Badge variant="secondary">{ticket.status}</Badge>
+              <Badge className={getStatusClass(ticket.status)}>
+                {ticket.status}
+              </Badge>
             </span>
             <span>{ticket.prioridade}</span>
             <span>{ticket.data}</span>
