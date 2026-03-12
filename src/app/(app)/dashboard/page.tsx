@@ -51,90 +51,99 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <Card>
+        <Card className="border-slate-200 bg-slate-50">
           <CardHeader>
-            <CardTitle>Total de Chamados</CardTitle>
+            <CardTitle className="text-slate-700">Total de Chamados</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{totalTickets}</p>
+            <p className="text-3xl font-bold text-slate-800">{totalTickets}</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-green-200 bg-green-50">
           <CardHeader>
-            <CardTitle>Em aberto</CardTitle>
+            <CardTitle className="text-green-700">Em aberto</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{openTickets}</p>
+            <p className="text-3xl font-bold text-green-800">{openTickets}</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-yellow-200 bg-yellow-50">
           <CardHeader>
-            <CardTitle>Em andamento</CardTitle>
+            <CardTitle className="text-yellow-700">Em andamento</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{inProgressTickets}</p>
+            <p className="text-3xl font-bold text-yellow-800">
+              {inProgressTickets}
+            </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-blue-200 bg-blue-50">
           <CardHeader>
-            <CardTitle>Resolvidos</CardTitle>
+            <CardTitle className="text-blue-700">Resolvidos</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{resolvedTickets}</p>
+            <p className="text-3xl font-bold text-blue-800">{resolvedTickets}</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-red-200 bg-red-50">
           <CardHeader>
-            <CardTitle>Alta prioridade</CardTitle>
+            <CardTitle className="text-red-700">Alta prioridade</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{highPriorityTickets}</p>
+            <p className="text-3xl font-bold text-red-800">
+              {highPriorityTickets}
+            </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-        <Card className="w-200 lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Chamados recentes</CardTitle>
-          </CardHeader>
+      <div className="grid grid-cols-1 lg:grid-cols-4">
+      <Card className="w-230 lg:col-span-2">
+  <CardHeader>
+    <CardTitle>Chamados Recentes</CardTitle>
+  </CardHeader>
 
-          <CardContent className="space-y-0">
-            {recentTickets.map((ticket) => (
-              <div
-                key={ticket.id}
-                className="flex w-full items-center justify-between gap-4 border-b py-4 last:border-b-0"
-              >
-                <div className="min-w-0">
-                  <p className="font-semibold">{ticket.titulo}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {ticket.cliente}
-                  </p>
-                </div>
+  <CardContent className="space-y-4">
+    <div className="grid grid-cols-5 border-b pb-3 text-sm font-medium text-muted-foreground">
+      <span>Título</span>
+      <span>Cliente</span>
+      <span>Status</span>
+      <span>Prioridade</span>
+      <span>Data</span>
+    </div>
 
-                <div className="flex shrink-0 items-center gap-2">
-                  <Badge className={getStatusClass(ticket.status)}>
-                    {ticket.status}
-                  </Badge>
-
-                  <Badge className={getPriorityClass(ticket.prioridade)}>
-                    {ticket.prioridade}
-                  </Badge>
-
-                  <span className="text-sm text-muted-foreground">
-                    {ticket.data}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card className="h-70">
+    {recentTickets.map((ticket) => (
+      <div
+        key={ticket.id}
+        className="grid grid-cols-5 items-center border-b py-3 last:border-b-0"
+      >
+        <span className="font-medium">{ticket.titulo}</span>
+        <span className="text-sm text-muted-foreground">
+          {ticket.cliente}
+        </span>
+        <span>
+          <Badge className={getStatusClass(ticket.status)}>
+            {ticket.status}
+          </Badge>
+        </span>
+        <span>
+          <Badge className="bg-white text-sm text-muted-foreground">
+            {ticket.prioridade}
+          </Badge>
+        </span>
+        <span className="text-sm text-muted-foreground">
+          {ticket.data}
+        </span>
+      </div>
+    ))}
+  </CardContent>
+</Card>
+        <div className="grid grid-cols-1 gap-4 lg:col-span-2 lg:grid-cols-2">
+        <Card className="h-70 ml-36 col-start-1">
           <CardHeader>
             <CardTitle>Resumo por prioridade</CardTitle>
           </CardHeader>
@@ -189,6 +198,7 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   );
