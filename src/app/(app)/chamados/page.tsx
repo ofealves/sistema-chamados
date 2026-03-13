@@ -31,7 +31,7 @@ const ChamadosPage = () => {
         </div>
 
         <Button asChild>
-          <Link href="/chamados/novo">Novo chamado</Link>
+          <Link href="/novo">Novo chamado</Link>
         </Button>
       </div>
 

@@ -116,7 +116,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
 
         {/* Chamados Recentes — mini tabela, ocupa 2 colunas */}
-        <Card className="xl:col-span-2 min-w-0">
+        <Card className="lg:col-span-2 min-w-0 w-full">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl">Chamados Recentes</CardTitle>
           </CardHeader>
@@ -148,7 +148,7 @@ export default function DashboardPage() {
                       key={ticket.id}
                       className="hover:bg-muted/30 transition-colors"
                     >
-                      <td className="px-4 py-3 font-medium max-w-[180px]">
+                      <td className="px-4 py-3 font-medium max-w-[180px">
                         <span className="block truncate">{ticket.titulo}</span>
                       </td>
                       <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
@@ -160,7 +160,7 @@ export default function DashboardPage() {
                         </Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <Badge className={`text-xs whitespace-nowrap ${getPriorityClass(ticket.prioridade)}`}>
+                        <Badge className="text-xs bg-white text-muted-foreground whitespace-nowrap">
                           {ticket.prioridade}
                         </Badge>
                       </td>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Coluna lateral com Resumo + Status */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-row gap-4">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg md:text-xl">
