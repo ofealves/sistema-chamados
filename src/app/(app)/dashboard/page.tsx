@@ -23,182 +23,205 @@ const lowPriorityTickets = tickets.filter(
 const recentTickets = tickets.slice(0, 5);
 
 const getStatusClass = (status: string) => {
-  if (status === "Aberto") {
-    return "bg-green-500 text-white";
-  } else if (status === "Em andamento") {
-    return "bg-yellow-500 text-black";
-  } else {
-    return "bg-blue-500 text-white";
-  }
+  if (status === "Aberto") return "bg-green-500 text-white";
+  if (status === "Em andamento") return "bg-yellow-500 text-black";
+  return "bg-blue-500 text-white";
 };
 
 const getPriorityClass = (prioridade: string) => {
-  if (prioridade === "Alta") {
-    return "bg-red-500 text-white";
-  } else if (prioridade === "Média") {
-    return "bg-orange-400 text-black";
-  } else {
-    return "bg-gray-500 text-white";
-  }
+  if (prioridade === "Alta") return "bg-red-500 text-white";
+  if (prioridade === "Média") return "bg-orange-400 text-black";
+  return "bg-gray-500 text-white";
 };
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-4 md:p-6">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">Visão geral dos chamados</p>
+        <h1 className="text-2xl font-bold md:text-3xl">Dashboard</h1>
+        <p className="text-sm text-muted-foreground md:text-base">
+          Visão geral dos chamados
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+      {/* Stats cards */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">
         <Card className="border-slate-200 bg-slate-50">
-          <CardHeader>
-            <CardTitle className="text-slate-700">Total de Chamados</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-slate-700 md:text-base">
+              Total de Chamados
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-slate-800">{totalTickets}</p>
+            <p className="text-2xl font-bold text-slate-800 md:text-3xl">
+              {totalTickets}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="border-green-200 bg-green-50">
-          <CardHeader>
-            <CardTitle className="text-green-700">Em aberto</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-green-700 md:text-base">
+              Em aberto
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-800">{openTickets}</p>
+            <p className="text-2xl font-bold text-green-800 md:text-3xl">
+              {openTickets}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="border-yellow-200 bg-yellow-50">
-          <CardHeader>
-            <CardTitle className="text-yellow-700">Em andamento</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-yellow-700 md:text-base">
+              Em andamento
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-yellow-800">
+            <p className="text-2xl font-bold text-yellow-800 md:text-3xl">
               {inProgressTickets}
             </p>
           </CardContent>
         </Card>
 
         <Card className="border-blue-200 bg-blue-50">
-          <CardHeader>
-            <CardTitle className="text-blue-700">Resolvidos</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-blue-700 md:text-base">
+              Resolvidos
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-blue-800">{resolvedTickets}</p>
+            <p className="text-2xl font-bold text-blue-800 md:text-3xl">
+              {resolvedTickets}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="border-red-200 bg-red-50">
-          <CardHeader>
-            <CardTitle className="text-red-700">Alta prioridade</CardTitle>
+        <Card className="border-red-200 bg-red-50 col-span-2 sm:col-span-1">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-red-700 md:text-base">
+              Alta prioridade
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-red-800">
+            <p className="text-2xl font-bold text-red-800 md:text-3xl">
               {highPriorityTickets}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4">
-      <Card className="w-230 lg:col-span-2">
-  <CardHeader>
-    <CardTitle>Chamados Recentes</CardTitle>
-  </CardHeader>
+      {/* Main content */}
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
 
-  <CardContent className="space-y-4">
-    <div className="grid grid-cols-5 border-b pb-3 text-sm font-medium text-muted-foreground">
-      <span>Título</span>
-      <span>Cliente</span>
-      <span>Status</span>
-      <span>Prioridade</span>
-      <span>Data</span>
-    </div>
-
-    {recentTickets.map((ticket) => (
-      <div
-        key={ticket.id}
-        className="grid grid-cols-5 items-center border-b py-3 last:border-b-0"
-      >
-        <span className="font-medium">{ticket.titulo}</span>
-        <span className="text-sm text-muted-foreground">
-          {ticket.cliente}
-        </span>
-        <span>
-          <Badge className={getStatusClass(ticket.status)}>
-            {ticket.status}
-          </Badge>
-        </span>
-        <span>
-          <Badge className="bg-white text-sm text-muted-foreground">
-            {ticket.prioridade}
-          </Badge>
-        </span>
-        <span className="text-sm text-muted-foreground">
-          {ticket.data}
-        </span>
-      </div>
-    ))}
-  </CardContent>
-</Card>
-        <div className="grid grid-cols-1 gap-4 lg:col-span-2 lg:grid-cols-2">
-        <Card className="h-70 ml-36 col-start-1">
+        {/* Chamados Recentes — mini tabela, ocupa 2 colunas */}
+        <Card className="xl:col-span-2 min-w-0">
           <CardHeader>
-            <CardTitle>Resumo por prioridade</CardTitle>
+            <CardTitle className="text-lg md:text-xl">Chamados Recentes</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between rounded-lg border p-3">
-              <span className="font-medium">Alta</span>
-              <Badge className="bg-red-500 text-white">
-                {highPriorityTickets}
-              </Badge>
-            </div>
-
-            <div className="flex items-center justify-between rounded-lg border p-3">
-              <span className="font-medium">Média</span>
-              <Badge className="bg-orange-400 text-black">
-                {mediumPriorityTickets}
-              </Badge>
-            </div>
-
-            <div className="flex items-center justify-between rounded-lg border p-3">
-              <span className="font-medium">Baixa</span>
-              <Badge className="bg-gray-500 text-white">
-                {lowPriorityTickets}
-              </Badge>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b bg-muted/50">
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                      Título
+                    </th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                      Cliente
+                    </th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                      Status
+                    </th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                      Prioridade
+                    </th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                      Data
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {recentTickets.map((ticket) => (
+                    <tr
+                      key={ticket.id}
+                      className="hover:bg-muted/30 transition-colors"
+                    >
+                      <td className="px-4 py-3 font-medium max-w-[180px]">
+                        <span className="block truncate">{ticket.titulo}</span>
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                        {ticket.cliente}
+                      </td>
+                      <td className="px-4 py-3">
+                        <Badge className={`text-xs whitespace-nowrap ${getStatusClass(ticket.status)}`}>
+                          {ticket.status}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-3">
+                        <Badge className={`text-xs whitespace-nowrap ${getPriorityClass(ticket.prioridade)}`}>
+                          {ticket.prioridade}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                        {ticket.data}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="h-70">
-          <CardHeader>
-            <CardTitle>Status dos Chamados</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between rounded-lg border p-3">
-              <span className="font-medium">Aberto</span>
-              <Badge className="bg-green-500 text-white">
-                {openTickets}
-              </Badge>
-            </div>
+        {/* Coluna lateral com Resumo + Status */}
+        <div className="flex flex-col gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg md:text-xl">
+                Resumo por prioridade
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="font-medium">Alta</span>
+                <Badge className="bg-red-500 text-white">{highPriorityTickets}</Badge>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="font-medium">Média</span>
+                <Badge className="bg-orange-400 text-black">{mediumPriorityTickets}</Badge>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="font-medium">Baixa</span>
+                <Badge className="bg-gray-500 text-white">{lowPriorityTickets}</Badge>
+              </div>
+            </CardContent>
+          </Card>
 
-            <div className="flex items-center justify-between rounded-lg border p-3">
-              <span className="font-medium">Em andamento</span>
-              <Badge className="bg-yellow-500 text-black">
-                {inProgressTickets}
-              </Badge>
-            </div>
-
-            <div className="flex items-center justify-between rounded-lg border p-3">
-              <span className="font-medium">Resolvido</span>
-              <Badge className="bg-blue-500 text-white">
-                {resolvedTickets}
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg md:text-xl">
+                Status dos Chamados
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="font-medium">Aberto</span>
+                <Badge className="bg-green-500 text-white">{openTickets}</Badge>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="font-medium">Em andamento</span>
+                <Badge className="bg-yellow-500 text-black">{inProgressTickets}</Badge>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="font-medium">Resolvido</span>
+                <Badge className="bg-blue-500 text-white">{resolvedTickets}</Badge>
+              </div>
+            </CardContent>
+          </Card>
         </div>
+
       </div>
     </div>
   );
