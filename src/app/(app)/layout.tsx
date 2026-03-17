@@ -34,7 +34,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
             </Link>
 
             <Link
-              href="/chamados/novo"
+              href="/novo"
               className="rounded-lg px-3 py-2 text-sm font-medium text-zinc-200 transition hover:bg-zinc-800 hover:text-white"
             >
               Novo chamado
