@@ -38,16 +38,6 @@ const getStatusClass = (status: string) => {
   }
 };
 
-const getPriorityClass = (prioridade: string) => {
-  if (prioridade === "Alta") {
-    return "bg-red-500 text-white";
-  } else if (prioridade === "Média") {
-    return "bg-orange-400 text-black";
-  } else {
-    return "bg-gray-500 text-white";
-  }
-};
-
 const RelatoriosPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 

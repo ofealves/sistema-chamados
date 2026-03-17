@@ -28,12 +28,6 @@ const getStatusClass = (status: string) => {
   return "bg-blue-500 text-white";
 };
 
-const getPriorityClass = (prioridade: string) => {
-  if (prioridade === "Alta") return "bg-red-500 text-white";
-  if (prioridade === "Média") return "bg-orange-400 text-black";
-  return "bg-gray-500 text-white";
-};
-
 export default function DashboardPage() {
   return (
     <div className="space-y-6 p-4 md:p-6">
