@@ -28,6 +28,12 @@ const getStatusClass = (status: string) => {
   return "bg-blue-500 text-white";
 };
 
+const getPriorityClass = (prioridade: string) => {
+  if (prioridade === "Alta") return "bg-red-500 text-white";
+  if (prioridade === "Média") return "bg-orange-400 text-black";
+  return "bg-gray-500 text-white";
+};
+
 export default function DashboardPage() {
   return (
     <div className="space-y-6 p-4 md:p-6">
@@ -38,8 +44,7 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats cards */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 2xl:grid-cols-5">
         <Card className="border-slate-200 bg-slate-50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-slate-700 md:text-base">
@@ -92,7 +97,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-red-200 bg-red-50 col-span-2 sm:col-span-1">
+        <Card className="col-span-2 border-red-200 bg-red-50 sm:col-span-1">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-red-700 md:text-base">
               Alta prioridade
@@ -106,17 +111,17 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Main content */}
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-
-        {/* Chamados Recentes — mini tabela, ocupa 2 colunas */}
-        <Card className="lg:col-span-2 min-w-0 w-full">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-4">
+        <Card className="min-w-0 w-full xl:col-span-2">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl">Chamados Recentes</CardTitle>
+            <CardTitle className="text-lg md:text-xl">
+              Chamados Recentes
+            </CardTitle>
           </CardHeader>
+
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="min-w-[700px] w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">
@@ -136,29 +141,36 @@ export default function DashboardPage() {
                     </th>
                   </tr>
                 </thead>
+
                 <tbody className="divide-y">
                   {recentTickets.map((ticket) => (
                     <tr
                       key={ticket.id}
-                      className="hover:bg-muted/30 transition-colors"
+                      className="transition-colors hover:bg-muted/30"
                     >
-                      <td className="px-4 py-3 font-medium max-w-[180px">
+                      <td className="max-w-[180px] px-4 py-3 font-medium">
                         <span className="block truncate">{ticket.titulo}</span>
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                      <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
                         {ticket.cliente}
                       </td>
                       <td className="px-4 py-3">
-                        <Badge className={`text-xs whitespace-nowrap ${getStatusClass(ticket.status)}`}>
+                        <Badge
+                          className={`whitespace-nowrap text-xs ${getStatusClass(
+                            ticket.status
+                          )}`}
+                        >
                           {ticket.status}
                         </Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <Badge className="text-xs bg-white text-muted-foreground whitespace-nowrap">
+                        <Badge
+                          className="whitespace-nowrap text-xs bg-white text-muted-foreground"
+                        >
                           {ticket.prioridade}
                         </Badge>
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                      <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
                         {ticket.data}
                       </td>
                     </tr>
@@ -169,53 +181,65 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Coluna lateral com Resumo + Status */}
-        <div className="flex flex-row gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg md:text-xl">
-                Resumo por prioridade
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between rounded-lg border p-3">
-                <span className="font-medium">Alta</span>
-                <Badge className="bg-red-500 text-white">{highPriorityTickets}</Badge>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border p-3">
-                <span className="font-medium">Média</span>
-                <Badge className="bg-orange-400 text-black">{mediumPriorityTickets}</Badge>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border p-3">
-                <span className="font-medium">Baixa</span>
-                <Badge className="bg-gray-500 text-white">{lowPriorityTickets}</Badge>
-              </div>
-            </CardContent>
-          </Card>
+        <Card className="h-fit">
+          <CardHeader>
+            <CardTitle className="text-base md:text-lg">
+              Resumo por prioridade
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
+              <span className="font-medium">Alta</span>
+              <Badge className="bg-red-500 text-white">
+                {highPriorityTickets}
+              </Badge>
+            </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg md:text-xl">
-                Status dos Chamados
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between rounded-lg border p-3">
-                <span className="font-medium">Aberto</span>
-                <Badge className="bg-green-500 text-white">{openTickets}</Badge>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border p-3">
-                <span className="font-medium">Em andamento</span>
-                <Badge className="bg-yellow-500 text-black">{inProgressTickets}</Badge>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border p-3">
-                <span className="font-medium">Resolvido</span>
-                <Badge className="bg-blue-500 text-white">{resolvedTickets}</Badge>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
+              <span className="font-medium">Média</span>
+              <Badge className="bg-orange-400 text-black">
+                {mediumPriorityTickets}
+              </Badge>
+            </div>
 
+            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
+              <span className="font-medium">Baixa</span>
+              <Badge className="bg-gray-500 text-white">
+                {lowPriorityTickets}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="h-fit">
+          <CardHeader>
+            <CardTitle className="text-base md:text-lg">
+              Status dos Chamados
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
+              <span className="font-medium">Aberto</span>
+              <Badge className="bg-green-500 text-white">
+                {openTickets}
+              </Badge>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
+              <span className="font-medium">Em andamento</span>
+              <Badge className="bg-yellow-500 text-black">
+                {inProgressTickets}
+              </Badge>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
+              <span className="font-medium">Resolvido</span>
+              <Badge className="bg-blue-500 text-white">
+                {resolvedTickets}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

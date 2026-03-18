@@ -15,12 +15,14 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+
 
 const loginSchema = z.object({
-  email: z.email({ error: "Digite um e-mail válido" }),
+  email: z.string(), //z.email({ error: "Digite um e-mail válido" }),
   password: z
     .string()
-    .min(6, { error: "A senha deve ter no mínimo 6 caracteres" }),
+    //.min(6, { error: "A senha deve ter no mínimo 6 caracteres" }),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -34,8 +36,10 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    console.log("Dados do login:", data);
+  const router = useRouter();
+
+  const onSubmit = async () => {
+    router.push('/dashboard')
   };
 
   return (
