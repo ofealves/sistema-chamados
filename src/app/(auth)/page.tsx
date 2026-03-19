@@ -111,7 +111,7 @@ const LoginPage = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-zinc-900 text-white hover:bg-zinc-800"
+                  className="w-full bg-zinc-900 text-white cursor-pointer hover:bg-zinc-800"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Entrando..." : "Entrar"}

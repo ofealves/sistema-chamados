@@ -56,7 +56,7 @@ const RelatoriosPage = () => {
           </p>
         </div>
 
-        <Button>Exportar PDF</Button>
+        <Button className="cursor-pointer">Exportar PDF</Button>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
