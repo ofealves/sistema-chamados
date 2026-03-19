@@ -20,18 +20,23 @@ const lowPriorityTickets = tickets.filter(
   (ticket) => ticket.prioridade === "Baixa"
 ).length;
 
-const recentTickets = tickets.slice(0, 5);
+const parseDate = (dateString: string) => {
+  const [day, month, year] = dateString.split("/");
+  return new Date(Number(year), Number(month) - 1, Number(day));
+};
+const recentTickets = [...tickets]
+  .sort((a, b) => {
+    const timeA = parseDate(a.data).getTime();
+    const timeB = parseDate(b.data).getTime();
+
+    return timeB - timeA;
+  })
+  .slice(0, 5);
 
 const getStatusClass = (status: string) => {
   if (status === "Aberto") return "bg-green-500 text-white";
   if (status === "Em andamento") return "bg-yellow-500 text-black";
   return "bg-blue-500 text-white";
-};
-
-const getPriorityClass = (prioridade: string) => {
-  if (prioridade === "Alta") return "bg-red-500 text-white";
-  if (prioridade === "Média") return "bg-orange-400 text-black";
-  return "bg-gray-500 text-white";
 };
 
 export default function DashboardPage() {
@@ -121,7 +126,7 @@ export default function DashboardPage() {
 
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="min-w-[700px] w-full text-sm">
+              <table className="min-w-175 w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">
@@ -148,7 +153,7 @@ export default function DashboardPage() {
                       key={ticket.id}
                       className="transition-colors hover:bg-muted/30"
                     >
-                      <td className="max-w-[180px] px-4 py-3 font-medium">
+                      <td className="max-w-45 px-4 py-3 font-medium">
                         <span className="block truncate">{ticket.titulo}</span>
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">

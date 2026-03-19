@@ -16,10 +16,15 @@ const getStatusClass = (status: string) => {
   }
 };
 
-
 const ChamadosPage = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
+  const [dateOrder, setDateOrder] = useState("");
+
+  const parseDate = (dateString: string) => {
+    const [day, month, year] = dateString.split("/");
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  };
 
   const filteredTickets = tickets.filter((ticket) => {
     const matchesStatus =
@@ -31,7 +36,22 @@ const ChamadosPage = () => {
     return matchesStatus && matchesPriority;
   });
 
-  const countTickets = filteredTickets.length;
+  const sortedTickets = [...filteredTickets].sort((a, b) => {
+    const timeA = parseDate(a.data).getTime();
+    const timeB = parseDate(b.data).getTime();
+
+    if (dateOrder === "recentes") {
+      return timeB - timeA;
+    }
+
+    if (dateOrder === "antigos") {
+      return timeA - timeB;
+    }
+
+    return 0;
+  });
+
+  const countTickets = sortedTickets.length;
   const ticketLabel = countTickets === 1 ? "Ticket" : "Tickets";
 
   return (
@@ -74,6 +94,16 @@ const ChamadosPage = () => {
           <option value="Média">Média</option>
           <option value="Alta">Alta</option>
         </select>
+
+        <select
+          value={dateOrder}
+          onChange={(e) => setDateOrder(e.target.value)}
+          className="rounded-md border bg-background px-3 py-2 text-sm"
+        >
+          <option value="">Sem ordenação</option>
+          <option value="recentes">Mais recentes</option>
+          <option value="antigos">Mais antigos</option>
+        </select>
       </div>
 
       <div className="rounded-xl border bg-background">
@@ -85,7 +115,7 @@ const ChamadosPage = () => {
           <span>Data</span>
         </div>
 
-        {filteredTickets.map((ticket) => (
+        {sortedTickets.map((ticket) => (
           <Link
             key={ticket.id}
             href={`/chamados/${ticket.id}`}
