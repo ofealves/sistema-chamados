@@ -22,7 +22,7 @@ const loginSchema = z.object({
   email: z.string(), //z.email({ error: "Digite um e-mail válido" }),
   password: z
     .string()
-    //.min(6, { error: "A senha deve ter no mínimo 6 caracteres" }),
+  //.min(6, { error: "A senha deve ter no mínimo 6 caracteres" }),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -127,7 +127,8 @@ const LoginPage = () => {
 
                   <button
                     type="button"
-                    className="text-zinc-500 hover:text-zinc-700 hover:underline"
+                    onClick={() => alert("A recuperação de senha será implementada em breve.")}
+                    className="text-sm text-muted-foreground cursor-pointer hover:text-foreground"
                   >
                     Esqueci minha senha
                   </button>
