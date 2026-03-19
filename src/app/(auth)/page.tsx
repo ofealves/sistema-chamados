@@ -35,7 +35,7 @@ const LoginPage = () => {
 
   const router = useRouter();
 
-  const onSubmit = async (_data: LoginFormData) => {
+  const onSubmit = async () => {
     router.push("/dashboard");
   };
 
