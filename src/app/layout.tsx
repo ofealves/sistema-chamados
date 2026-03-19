@@ -5,8 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Nexo",
-  description: "Sistema de chamados",
+  title: "Nexou | Sistema de Chamados",
+  description:
+    "Sistema de chamados com dashboard, relatórios e gerenciamento de tickets.",
 };
 
 const RootLayout = ({

@@ -18,19 +18,11 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
   const linkClass = (href: string) => {
     const isActive = pathname === href;
 
-    return `rounded-lg px-3 py-2 text-sm font-medium transition ${isActive
+    return `rounded-lg px-3 py-2 text-sm font-medium transition ${
+      isActive
         ? "bg-zinc-800 text-white"
         : "text-zinc-200 hover:bg-zinc-800 hover:text-white"
-      }`;
-  };
-
-  const mobileLinkClass = (href: string) => {
-    const isActive = pathname === href;
-
-    return `rounded-lg px-3 py-2 text-sm font-medium transition ${isActive
-        ? "bg-zinc-800 text-white"
-        : "text-zinc-200 hover:bg-zinc-800 hover:text-white"
-      }`;
+    }`;
   };
 
   return (
@@ -39,8 +31,8 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
         <aside className="hidden md:sticky md:top-0 md:flex md:h-screen md:flex-col md:justify-between md:border-r md:border-zinc-800 md:bg-zinc-900 md:px-5 md:py-6 md:text-zinc-100">
           <div>
             <div className="mb-8">
-              <h2 className="text-2xl font-bold tracking-tight">Nexo</h2>
-              <p className="mt-1 text-sm text-zinc-400">Sistema de chamados</p>
+              <h2 className="text-2xl font-bold tracking-tight">Nexou</h2>
+              <p className="mt-1 text-sm text-zinc-400">Sistema de Chamados</p>
             </div>
 
             <nav className="flex flex-col gap-2">
@@ -86,8 +78,8 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
           <div className="border-b border-zinc-800 bg-zinc-900 text-zinc-100 md:hidden">
             <div className="flex items-center justify-between px-4 py-3">
               <div>
-                <h2 className="text-lg font-bold">Nexo</h2>
-                <p className="text-sm text-zinc-400">Sistema de chamados</p>
+                <h2 className="text-lg font-bold">Nexou</h2>
+                <p className="text-sm text-zinc-400">Sistema de Chamados</p>
               </div>
 
               <button
@@ -105,7 +97,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                 <nav className="flex flex-col gap-2">
                   <Link
                     href="/dashboard"
-                    className={mobileLinkClass("/dashboard")}
+                    className={linkClass("/dashboard")}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Dashboard
@@ -113,7 +105,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
                   <Link
                     href="/chamados"
-                    className={mobileLinkClass("/chamados")}
+                    className={linkClass("/chamados")}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Chamados
@@ -121,7 +113,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
                   <Link
                     href="/relatorios"
-                    className={mobileLinkClass("/relatorios")}
+                    className={linkClass("/relatorios")}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Relatórios
@@ -129,7 +121,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
                   <Link
                     href="/novo"
-                    className={mobileLinkClass("/novo")}
+                    className={linkClass("/novo")}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Novo chamado

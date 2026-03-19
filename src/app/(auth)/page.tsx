@@ -17,12 +17,9 @@ import {
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 
-
 const loginSchema = z.object({
-  email: z.string(), //z.email({ error: "Digite um e-mail válido" }),
-  password: z
-    .string()
-  //.min(6, { error: "A senha deve ter no mínimo 6 caracteres" }),
+  email: z.string(), // .email("Digite um e-mail válido"),
+  password: z.string(), // .min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -38,8 +35,8 @@ const LoginPage = () => {
 
   const router = useRouter();
 
-  const onSubmit = async () => {
-    router.push('/dashboard')
+  const onSubmit = async (_data: LoginFormData) => {
+    router.push("/dashboard");
   };
 
   return (
@@ -48,7 +45,7 @@ const LoginPage = () => {
         <div className="hidden lg:flex flex-col justify-center bg-zinc-900 px-12 text-zinc-100">
           <div className="max-w-md space-y-6">
             <div>
-              <h1 className="text-4xl font-bold tracking-tight">Nexo</h1>
+              <h1 className="text-4xl font-bold tracking-tight">Nexou</h1>
               <p className="mt-2 text-zinc-400">
                 Plataforma de gestão de chamados com dashboard, relatórios e
                 acompanhamento completo do atendimento.
@@ -57,8 +54,8 @@ const LoginPage = () => {
 
             <div className="space-y-3 text-sm text-zinc-400">
               <p>• Organize tickets e prioridades em um só lugar</p>
-              <p>• Acompanhe o andamento do suporte em tempo real</p>
-              <p>• Visualize métricas e relatórios com mais clareza</p>
+              <p>• Acompanhe o andamento do suporte com mais clareza</p>
+              <p>• Visualize métricas e relatórios de forma centralizada</p>
             </div>
           </div>
         </div>
@@ -68,9 +65,9 @@ const LoginPage = () => {
             <CardHeader className="space-y-2">
               <div className="mb-2 lg:hidden">
                 <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
-                  Nexo
+                  Nexou
                 </h1>
-                <p className="text-sm text-zinc-500">Sistema de chamados</p>
+                <p className="text-sm text-zinc-500">Sistema de Chamados</p>
               </div>
 
               <CardTitle className="text-2xl text-zinc-900">Entrar</CardTitle>
@@ -111,7 +108,7 @@ const LoginPage = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-zinc-900 text-white cursor-pointer hover:bg-zinc-800"
+                  className="w-full cursor-pointer bg-zinc-900 text-white hover:bg-zinc-800"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Entrando..." : "Entrar"}
@@ -127,8 +124,10 @@ const LoginPage = () => {
 
                   <button
                     type="button"
-                    onClick={() => alert("A recuperação de senha será implementada em breve.")}
-                    className="text-sm text-muted-foreground cursor-pointer hover:text-foreground"
+                    onClick={() =>
+                      alert("A recuperação de senha será implementada em breve.")
+                    }
+                    className="cursor-pointer text-sm text-muted-foreground hover:text-foreground"
                   >
                     Esqueci minha senha
                   </button>
