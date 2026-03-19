@@ -66,7 +66,11 @@ const RelatoriosPage = () => {
           </p>
         </div>
 
-        <Button className="w-full cursor-pointer sm:w-auto">
+        <Button
+        onClick={() =>
+          alert("Exportar PDF será implementado em breve.")
+        }
+         className="w-full cursor-pointer sm:w-auto">
           Exportar PDF
         </Button>
       </div>
