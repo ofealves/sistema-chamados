@@ -58,10 +58,10 @@ const RegisterPage = () => {
         <div className="hidden lg:flex flex-col justify-center bg-zinc-900 px-12 text-zinc-100">
           <div className="max-w-md space-y-6">
             <div>
-              <h1 className="text-4xl font-bold tracking-tight">Nexo</h1>
+              <h1 className="text-4xl font-bold tracking-tight">Nexou</h1>
               <p className="mt-2 text-zinc-400">
-                Plataforma de gestão de chamados com dashboard, relatórios e
-                acompanhamento completo do atendimento.
+              Plataforma de gestão de chamados com dashboard, relatórios e
+              acompanhamento completo do atendimento.
               </p>
             </div>
 
