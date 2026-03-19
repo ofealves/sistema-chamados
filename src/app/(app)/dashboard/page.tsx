@@ -24,19 +24,25 @@ const parseDate = (dateString: string) => {
   const [day, month, year] = dateString.split("/");
   return new Date(Number(year), Number(month) - 1, Number(day));
 };
+
 const recentTickets = [...tickets]
   .sort((a, b) => {
     const timeA = parseDate(a.data).getTime();
     const timeB = parseDate(b.data).getTime();
-
     return timeB - timeA;
   })
   .slice(0, 5);
 
 const getStatusClass = (status: string) => {
-  if (status === "Aberto") return "bg-green-500 text-white";
-  if (status === "Em andamento") return "bg-yellow-500 text-black";
-  return "bg-blue-500 text-white";
+  if (status === "Aberto") return "bg-green-500 text-white hover:bg-green-500";
+  if (status === "Em andamento") return "bg-yellow-500 text-black hover:bg-yellow-500";
+  return "bg-blue-500 text-white hover:bg-blue-500";
+};
+
+const getPriorityClass = (priority: string) => {
+  if (priority === "Alta") return "bg-red-100 text-red-700 hover:bg-red-100";
+  if (priority === "Média") return "bg-orange-100 text-orange-700 hover:bg-orange-100";
+  return "bg-zinc-100 text-zinc-700 hover:bg-zinc-100";
 };
 
 export default function DashboardPage() {
@@ -125,7 +131,38 @@ export default function DashboardPage() {
           </CardHeader>
 
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
+            {/* Mobile: cards empilhados */}
+            <div className="space-y-3 p-4 md:hidden">
+              {recentTickets.map((ticket) => (
+                <div key={ticket.id} className="rounded-xl border p-4">
+                  <div className="mb-3 flex items-start justify-between gap-3">
+                    <h3 className="line-clamp-2 text-sm font-semibold">
+                      {ticket.titulo}
+                    </h3>
+                    <span className="shrink-0 text-xs text-muted-foreground">
+                      {ticket.data}
+                    </span>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Cliente: </span>
+                      <span>{ticket.cliente}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge className={`text-xs ${getStatusClass(ticket.status)}`}>
+                        {ticket.status}
+                      </Badge>
+                      <Badge className={`text-xs ${getPriorityClass(ticket.prioridade)}`}>
+                        {ticket.prioridade}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop: tabela */}
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-175 w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
@@ -160,18 +197,12 @@ export default function DashboardPage() {
                         {ticket.cliente}
                       </td>
                       <td className="px-4 py-3">
-                        <Badge
-                          className={`whitespace-nowrap text-xs ${getStatusClass(
-                            ticket.status
-                          )}`}
-                        >
+                        <Badge className={`whitespace-nowrap text-xs ${getStatusClass(ticket.status)}`}>
                           {ticket.status}
                         </Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <Badge
-                          className="whitespace-nowrap text-xs bg-white text-muted-foreground"
-                        >
+                        <Badge className={`whitespace-nowrap text-xs ${getPriorityClass(ticket.prioridade)}`}>
                           {ticket.prioridade}
                         </Badge>
                       </td>
@@ -195,21 +226,19 @@ export default function DashboardPage() {
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
               <span className="font-medium">Alta</span>
-              <Badge className="bg-red-500 text-white">
+              <Badge className="bg-red-500 text-white hover:bg-red-500">
                 {highPriorityTickets}
               </Badge>
             </div>
-
             <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
               <span className="font-medium">Média</span>
-              <Badge className="bg-orange-400 text-black">
+              <Badge className="bg-orange-400 text-black hover:bg-orange-400">
                 {mediumPriorityTickets}
               </Badge>
             </div>
-
             <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
               <span className="font-medium">Baixa</span>
-              <Badge className="bg-gray-500 text-white">
+              <Badge className="bg-gray-500 text-white hover:bg-gray-500">
                 {lowPriorityTickets}
               </Badge>
             </div>
@@ -225,21 +254,19 @@ export default function DashboardPage() {
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
               <span className="font-medium">Aberto</span>
-              <Badge className="bg-green-500 text-white">
+              <Badge className="bg-green-500 text-white hover:bg-green-500">
                 {openTickets}
               </Badge>
             </div>
-
             <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
               <span className="font-medium">Em andamento</span>
-              <Badge className="bg-yellow-500 text-black">
+              <Badge className="bg-yellow-500 text-black hover:bg-yellow-500">
                 {inProgressTickets}
               </Badge>
             </div>
-
             <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
               <span className="font-medium">Resolvido</span>
-              <Badge className="bg-blue-500 text-white">
+              <Badge className="bg-blue-500 text-white hover:bg-blue-500">
                 {resolvedTickets}
               </Badge>
             </div>

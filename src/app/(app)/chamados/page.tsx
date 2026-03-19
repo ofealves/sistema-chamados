@@ -16,6 +16,16 @@ const getStatusClass = (status: string) => {
   }
 };
 
+const getPriorityClass = (priority: string) => {
+  if (priority === "Alta") {
+    return "bg-red-100 text-red-700 hover:bg-red-100";
+  } else if (priority === "Média") {
+    return "bg-orange-100 text-orange-700 hover:bg-orange-100";
+  } else {
+    return "bg-zinc-100 text-zinc-700 hover:bg-zinc-100";
+  }
+};
+
 const ChamadosPage = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
@@ -55,28 +65,28 @@ const ChamadosPage = () => {
   const ticketLabel = countTickets === 1 ? "Ticket" : "Tickets";
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Chamados</h1>
-          <p className="text-muted-foreground">
+    <div className="space-y-6 p-4 sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold sm:text-3xl">Chamados</h1>
+          <p className="text-sm text-muted-foreground sm:text-base">
             Gerencie os tickets de suporte
           </p>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground sm:text-base">
             {countTickets} {ticketLabel}
           </p>
         </div>
 
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
           <Link href="/novo">Novo chamado</Link>
         </Button>
       </div>
 
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-md border bg-background px-3 py-2 text-sm"
+          className="h-11 w-full rounded-md border bg-background px-3 text-sm outline-none"
         >
           <option value="">Todos os status</option>
           <option value="Aberto">Aberto</option>
@@ -87,7 +97,7 @@ const ChamadosPage = () => {
         <select
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value)}
-          className="rounded-md border bg-background px-3 py-2 text-sm"
+          className="h-11 w-full rounded-md border bg-background px-3 text-sm outline-none"
         >
           <option value="">Todas as prioridades</option>
           <option value="Baixa">Baixa</option>
@@ -98,7 +108,7 @@ const ChamadosPage = () => {
         <select
           value={dateOrder}
           onChange={(e) => setDateOrder(e.target.value)}
-          className="rounded-md border bg-background px-3 py-2 text-sm"
+          className="h-11 w-full rounded-md border bg-background px-3 text-sm outline-none"
         >
           <option value="">Sem ordenação</option>
           <option value="recentes">Mais recentes</option>
@@ -106,8 +116,46 @@ const ChamadosPage = () => {
         </select>
       </div>
 
-      <div className="rounded-xl border bg-background">
-        <div className="grid grid-cols-5 border-b px-4 py-3 text-sm font-medium">
+      {/* Mobile */}
+      <div className="space-y-3 md:hidden">
+        {sortedTickets.map((ticket) => (
+          <Link
+            key={ticket.id}
+            href={`/chamados/${ticket.id}`}
+            className="block rounded-xl border bg-background p-4 transition hover:bg-muted/50"
+          >
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <h2 className="line-clamp-2 text-sm font-semibold">
+                {ticket.titulo}
+              </h2>
+              <span className="shrink-0 text-xs text-muted-foreground">
+                {ticket.data}
+              </span>
+            </div>
+
+            <div className="space-y-2 text-sm">
+              <div>
+                <span className="text-muted-foreground">Cliente: </span>
+                <span>{ticket.cliente}</span>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <Badge className={getStatusClass(ticket.status)}>
+                  {ticket.status}
+                </Badge>
+
+                <Badge className={getPriorityClass(ticket.prioridade)}>
+                  {ticket.prioridade}
+                </Badge>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Desktop */}
+      <div className="hidden overflow-hidden rounded-xl border bg-background md:block">
+        <div className="grid grid-cols-[2fr_1.2fr_1.2fr_1fr_1fr] border-b px-4 py-3 text-sm font-medium">
           <span>Título</span>
           <span>Cliente</span>
           <span>Status</span>
@@ -119,17 +167,17 @@ const ChamadosPage = () => {
           <Link
             key={ticket.id}
             href={`/chamados/${ticket.id}`}
-            className="grid grid-cols-5 items-center px-4 py-3 text-sm hover:bg-muted/50"
+            className="grid grid-cols-[2fr_1.2fr_1.2fr_1fr_1fr] items-center gap-3 px-4 py-3 text-sm transition hover:bg-muted/50"
           >
-            <span>{ticket.titulo}</span>
-            <span>{ticket.cliente}</span>
+            <span className="truncate">{ticket.titulo}</span>
+            <span className="truncate">{ticket.cliente}</span>
             <span>
               <Badge className={getStatusClass(ticket.status)}>
                 {ticket.status}
               </Badge>
             </span>
             <span>
-              <Badge className="bg-white text-muted-foreground">
+              <Badge className={getPriorityClass(ticket.prioridade)}>
                 {ticket.prioridade}
               </Badge>
             </span>

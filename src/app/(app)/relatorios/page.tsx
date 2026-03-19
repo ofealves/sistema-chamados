@@ -30,11 +30,21 @@ const itemsPerPage = 5;
 
 const getStatusClass = (status: string) => {
   if (status === "Aberto") {
-    return "bg-green-500 text-white";
+    return "bg-green-500 text-white hover:bg-green-500";
   } else if (status === "Em andamento") {
-    return "bg-yellow-500 text-black";
+    return "bg-yellow-500 text-black hover:bg-yellow-500";
   } else {
-    return "bg-blue-500 text-white";
+    return "bg-blue-500 text-white hover:bg-blue-500";
+  }
+};
+
+const getPriorityClass = (priority: string) => {
+  if (priority === "Alta") {
+    return "bg-red-100 text-red-700 hover:bg-red-100";
+  } else if (priority === "Média") {
+    return "bg-orange-100 text-orange-700 hover:bg-orange-100";
+  } else {
+    return "bg-zinc-100 text-zinc-700 hover:bg-zinc-100";
   }
 };
 
@@ -47,93 +57,115 @@ const RelatoriosPage = () => {
   const paginatedTickets = tickets.slice(startIndex, endIndex);
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Relatórios</h1>
-          <p className="text-muted-foreground">
+    <div className="space-y-6 p-4 sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold sm:text-3xl">Relatórios</h1>
+          <p className="text-sm text-muted-foreground sm:text-base">
             Resumo geral dos chamados e indicadores do sistema
           </p>
         </div>
 
-        <Button className="cursor-pointer">Exportar PDF</Button>
+        <Button className="w-full cursor-pointer sm:w-auto">
+          Exportar PDF
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <Card className="border-slate-200 bg-slate-50">
-          <CardHeader>
-            <CardTitle className="text-slate-700">Total de Chamados</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base text-slate-700 sm:text-lg">
+              Total de Chamados
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-slate-800">{totalTickets}</p>
+            <p className="text-2xl font-bold text-slate-800 sm:text-3xl">
+              {totalTickets}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="border-green-200 bg-green-50">
-          <CardHeader>
-            <CardTitle className="text-green-700">Em aberto</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base text-green-700 sm:text-lg">
+              Em aberto
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-800">{openTickets}</p>
+            <p className="text-2xl font-bold text-green-800 sm:text-3xl">
+              {openTickets}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="border-amber-200 bg-amber-50">
-          <CardHeader>
-            <CardTitle className="text-amber-700">Em andamento</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base text-amber-700 sm:text-lg">
+              Em andamento
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-amber-800">
+            <p className="text-2xl font-bold text-amber-800 sm:text-3xl">
               {inProgressTickets}
             </p>
           </CardContent>
         </Card>
 
         <Card className="border-blue-200 bg-blue-50">
-          <CardHeader>
-            <CardTitle className="text-blue-700">Resolvidos</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base text-blue-700 sm:text-lg">
+              Resolvidos
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-blue-800">{resolvedTickets}</p>
+            <p className="text-2xl font-bold text-blue-800 sm:text-3xl">
+              {resolvedTickets}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="border-red-200 bg-red-50">
-          <CardHeader>
-            <CardTitle className="text-red-700">Alta prioridade</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base text-red-700 sm:text-lg">
+              Alta prioridade
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-red-800">
+            <p className="text-2xl font-bold text-red-800 sm:text-3xl">
               {highPriorityTickets}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card className="w-full">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <Card className="w-full overflow-hidden">
           <CardHeader>
-            <CardTitle>Status dos Chamados</CardTitle>
+            <CardTitle className="text-xl">Status dos Chamados</CardTitle>
           </CardHeader>
           <CardContent>
-            <StatusCharts
-              openTickets={openTickets}
-              inProgressTickets={inProgressTickets}
-              resolvedTickets={resolvedTickets}
-            />
+            <div className="h-65 w-full sm:h-80">
+              <StatusCharts
+                openTickets={openTickets}
+                inProgressTickets={inProgressTickets}
+                resolvedTickets={resolvedTickets}
+              />
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="w-full">
+        <Card className="w-full overflow-hidden">
           <CardHeader>
-            <CardTitle>Prioridade dos Chamados</CardTitle>
+            <CardTitle className="text-xl">Prioridade dos Chamados</CardTitle>
           </CardHeader>
           <CardContent>
-            <PriorityChart
-              highPriorityTickets={highPriorityTickets}
-              mediumPriorityTickets={mediumPriorityTickets}
-              lowPriorityTickets={lowPriorityTickets}
-            />
+            <div className="h-65 w-full sm:h-80">
+              <PriorityChart
+                highPriorityTickets={highPriorityTickets}
+                mediumPriorityTickets={mediumPriorityTickets}
+                lowPriorityTickets={lowPriorityTickets}
+              />
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -144,7 +176,7 @@ const RelatoriosPage = () => {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-5 border-b pb-3 text-sm font-medium text-muted-foreground">
+          <div className="hidden grid-cols-[2fr_1.2fr_1.2fr_1fr_1fr] border-b pb-3 text-sm font-medium text-muted-foreground md:grid">
             <span>Título</span>
             <span>Cliente</span>
             <span>Status</span>
@@ -152,41 +184,79 @@ const RelatoriosPage = () => {
             <span>Data</span>
           </div>
 
-          {paginatedTickets.map((ticket) => (
-            <div
-              key={ticket.id}
-              className="grid grid-cols-5 items-center border-b py-3 last:border-b-0"
-            >
-              <span className="font-medium">{ticket.titulo}</span>
-              <span className="text-sm text-muted-foreground">
-                {ticket.cliente}
-              </span>
-              <span>
-                <Badge className={getStatusClass(ticket.status)}>
-                  {ticket.status}
-                </Badge>
-              </span>
-              <span>
-                <Badge className="bg-white text-sm text-muted-foreground">
-                  {ticket.prioridade}
-                </Badge>
-              </span>
-              <span className="text-sm text-muted-foreground">
-                {ticket.data}
-              </span>
-            </div>
-          ))}
+          <div className="space-y-3 md:hidden">
+            {paginatedTickets.map((ticket) => (
+              <div
+                key={ticket.id}
+                className="rounded-xl border p-4"
+              >
+                <div className="mb-3 flex items-start justify-between gap-3">
+                  <h3 className="line-clamp-2 text-sm font-semibold">
+                    {ticket.titulo}
+                  </h3>
+                  <span className="shrink-0 text-xs text-muted-foreground">
+                    {ticket.data}
+                  </span>
+                </div>
 
-          <div className="flex items-center justify-between pt-4">
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Cliente: </span>
+                    <span>{ticket.cliente}</span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <Badge className={getStatusClass(ticket.status)}>
+                      {ticket.status}
+                    </Badge>
+
+                    <Badge className={getPriorityClass(ticket.prioridade)}>
+                      {ticket.prioridade}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden md:block">
+            {paginatedTickets.map((ticket) => (
+              <div
+                key={ticket.id}
+                className="grid grid-cols-[2fr_1.2fr_1.2fr_1fr_1fr] items-center gap-3 border-b py-3 last:border-b-0"
+              >
+                <span className="truncate font-medium">{ticket.titulo}</span>
+                <span className="truncate text-sm text-muted-foreground">
+                  {ticket.cliente}
+                </span>
+                <span>
+                  <Badge className={getStatusClass(ticket.status)}>
+                    {ticket.status}
+                  </Badge>
+                </span>
+                <span>
+                  <Badge className={getPriorityClass(ticket.prioridade)}>
+                    {ticket.prioridade}
+                  </Badge>
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {ticket.data}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
               Página {currentPage} de {totalPages}
             </p>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
                 onClick={() => setCurrentPage((prev) => prev - 1)}
                 disabled={currentPage === 1}
+                size="sm"
               >
                 Anterior
               </Button>
@@ -196,6 +266,7 @@ const RelatoriosPage = () => {
                   key={index + 1}
                   variant={currentPage === index + 1 ? "default" : "outline"}
                   onClick={() => setCurrentPage(index + 1)}
+                  size="sm"
                 >
                   {index + 1}
                 </Button>
@@ -205,6 +276,7 @@ const RelatoriosPage = () => {
                 variant="outline"
                 onClick={() => setCurrentPage((prev) => prev + 1)}
                 disabled={currentPage === totalPages}
+                size="sm"
               >
                 Próxima
               </Button>
