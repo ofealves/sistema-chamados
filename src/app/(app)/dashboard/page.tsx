@@ -55,7 +55,7 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 2xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <Card className="border-slate-200 bg-slate-50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-slate-700 md:text-base">
@@ -108,7 +108,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="col-span-2 border-red-200 bg-red-50 sm:col-span-1">
+        <Card className="border-red-200 bg-red-50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-red-700 md:text-base">
               Alta prioridade
