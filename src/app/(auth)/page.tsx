@@ -54,8 +54,8 @@ const LoginPage = () => {
 
             <div className="space-y-3 text-sm text-zinc-400">
               <p>• Organize tickets e prioridades em um só lugar</p>
-              <p>• Acompanhe o andamento do suporte com mais clareza</p>
-              <p>• Visualize métricas e relatórios de forma centralizada</p>
+              <p>• Acompanhe o andamento do suporte em tempo real</p>
+              <p>• Visualize métricas e relatórios com mais clareza</p>
             </div>
           </div>
         </div>
