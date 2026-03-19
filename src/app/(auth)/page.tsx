@@ -127,7 +127,7 @@ const LoginPage = () => {
                     onClick={() =>
                       alert("A recuperação de senha será implementada em breve.")
                     }
-                    className="cursor-pointer text-sm text-muted-foreground hover:text-foreground"
+                    className="cursor-pointer text-sm text-muted-foreground hover:text-foreground underline"
                   >
                     Esqueci minha senha
                   </button>
