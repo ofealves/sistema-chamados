@@ -32,11 +32,10 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
   const linkClass = (href: string) => {
     const isActive = pathname === href;
 
-    return `rounded-lg px-3 py-2 text-sm font-medium transition ${
-      isActive
+    return `rounded-lg px-3 py-2 text-sm font-medium transition ${isActive
         ? "bg-zinc-800 text-white"
         : "text-zinc-200 hover:bg-zinc-800 hover:text-white"
-    }`;
+      }`;
   };
 
   const getInitials = (name?: string) => {
@@ -44,10 +43,34 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
     return name
       .split(" ")
-      .map((word: string) => word[0])
+      .map((word: string) => word[0].toUpperCase())
       .slice(0, 2)
       .join("");
   };
+
+  const formatName = (name?: string) => {
+  if (!name) return "";
+
+  return name
+    .toLowerCase()
+    .split(" ")
+    .map((word: string) => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join(" ");
+};
+
+const formatRole = (role?: string) => {
+  if (!role) return "";
+
+  return role
+    .toLowerCase()
+    .split(" ")
+    .map((word: string) => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join(" ");
+};
 
   return (
     <div className="min-h-screen bg-zinc-100">
@@ -90,10 +113,10 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-white">
-                  {user?.name || "Usuário"}
+                  {user?.name ? formatName(user.name) : "Usuário"}
                 </p>
                 <p className="text-xs text-zinc-400">
-                  {user?.role || "Visitante"}
+                  {user?.role ? formatName(user.role) : "Usuário"}
                 </p>
               </div>
             </div>
