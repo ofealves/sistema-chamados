@@ -26,6 +26,20 @@ const getPriorityClass = (priority: string) => {
   }
 };
 
+const translateStatus = (status: string) => {
+  if (status === "open") return "Aberto";
+  if (status === "in_progress") return "Em andamento";
+  if (status === "done") return "Resolvido";
+  return status;
+};
+
+const translatePriority = (priority: string) => {
+  if (priority === "high") return "Alta";
+  if (priority === "medium") return "Média";
+  if (priority === "low") return "Baixa";
+  return priority;
+};
+
 const ChamadosPage = () => {
   const [tickets, setTickets] = useState<any[]>([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -36,7 +50,7 @@ const ChamadosPage = () => {
     const fetchTickets = async () => {
       try {
         const data = await getTickets();
-        console.log("TICKETS:", data); // debug
+        console.log("TICKETS:", data);
         setTickets(data);
       } catch (error) {
         console.error("Erro ao buscar tickets", error);
@@ -135,11 +149,11 @@ const ChamadosPage = () => {
 
             <div className="flex gap-2">
               <Badge className={getStatusClass(ticket.status)}>
-                {ticket.status}
+                {translateStatus(ticket.status)}
               </Badge>
 
               <Badge className={getPriorityClass(ticket.priority)}>
-                {ticket.priority}
+                {translatePriority(ticket.priority)}
               </Badge>
             </div>
           </Link>
@@ -165,13 +179,13 @@ const ChamadosPage = () => {
 
             <span>
               <Badge className={getStatusClass(ticket.status)}>
-                {ticket.status}
+                {translateStatus(ticket.status)}
               </Badge>
             </span>
 
             <span>
               <Badge className={getPriorityClass(ticket.priority)}>
-                {ticket.priority}
+                {translatePriority(ticket.priority)}
               </Badge>
             </span>
 
