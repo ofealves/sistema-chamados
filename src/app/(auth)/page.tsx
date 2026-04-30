@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { login } from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,7 +35,10 @@ const LoginPage = () => {
 
   const router = useRouter();
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: LoginFormData) => {
+    const response = await login(data.email, data.password);
+    console.log(response);
+    localStorage.setItem("token", response.token);
     router.push("/dashboard");
   };
 

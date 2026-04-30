@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,6 +15,8 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { registers } from "@/services/api";
+
 
 const registerSchema = z
   .object({
@@ -40,6 +42,7 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 const RegisterPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -49,7 +52,9 @@ const RegisterPage = () => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    console.log("Dados de Cadastro:", data);
+    const response = await registers(data.email, data.password, data.name);
+    console.log(response);
+    router.push('/');
   };
 
   return (
@@ -60,8 +65,8 @@ const RegisterPage = () => {
             <div>
               <h1 className="text-4xl font-bold tracking-tight">Nexou</h1>
               <p className="mt-2 text-zinc-400">
-              Plataforma de gestão de chamados com dashboard, relatórios e
-              acompanhamento completo do atendimento.
+                Plataforma de gestão de chamados com dashboard, relatórios e
+                acompanhamento completo do atendimento.
               </p>
             </div>
 
@@ -137,7 +142,7 @@ const RegisterPage = () => {
                     type="password"
                     placeholder="Confirme sua senha"
                     {...register("confirmPassword")}
-                    
+
                   />
                   {errors.confirmPassword && (
                     <p className="text-sm text-red-500">
