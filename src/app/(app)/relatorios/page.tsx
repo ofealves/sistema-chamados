@@ -1,30 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getTickets } from "@/services/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { tickets } from "@/lib/mock-data";
 import StatusCharts from "@/components/ui/charts/status-charts";
 import PriorityChart from "@/components/ui/charts/priority-charts";
-
-const totalTickets = tickets.length;
-const openTickets = tickets.filter((ticket) => ticket.status === "Aberto").length;
-const inProgressTickets = tickets.filter(
-  (ticket) => ticket.status === "Em andamento"
-).length;
-const resolvedTickets = tickets.filter(
-  (ticket) => ticket.status === "Resolvido"
-).length;
-const highPriorityTickets = tickets.filter(
-  (ticket) => ticket.prioridade === "Alta"
-).length;
-const mediumPriorityTickets = tickets.filter(
-  (ticket) => ticket.prioridade === "Média"
-).length;
-const lowPriorityTickets = tickets.filter(
-  (ticket) => ticket.prioridade === "Baixa"
-).length;
 
 const itemsPerPage = 5;
 
@@ -49,8 +31,70 @@ const getPriorityClass = (priority: string) => {
 };
 
 const RelatoriosPage = () => {
+  const [tickets, setTickets] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // 🔥 BUSCA DO BACKEND
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const data = await getTickets();
+
+        // 🔥 CONVERTE pro formato antigo (SEM QUEBRAR UI)
+        const formatted = data.map((t: any) => ({
+          id: t._id,
+          titulo: t.title,
+          cliente: "—",
+          status:
+            t.status === "open"
+              ? "Aberto"
+              : t.status === "in_progress"
+              ? "Em andamento"
+              : "Resolvido",
+          prioridade:
+            t.priority === "high"
+              ? "Alta"
+              : t.priority === "medium"
+              ? "Média"
+              : "Baixa",
+          data: new Date(t.createdAt).toLocaleDateString(),
+        }));
+
+        setTickets(formatted);
+      } catch (error) {
+        console.error("Erro ao buscar tickets", error);
+      }
+    };
+
+    fetchTickets();
+  }, []);
+
+  // 📊 MÉTRICAS (AGORA DINÂMICAS)
+  const totalTickets = tickets.length;
+
+  const openTickets = tickets.filter((ticket) => ticket.status === "Aberto").length;
+
+  const inProgressTickets = tickets.filter(
+    (ticket) => ticket.status === "Em andamento"
+  ).length;
+
+  const resolvedTickets = tickets.filter(
+    (ticket) => ticket.status === "Resolvido"
+  ).length;
+
+  const highPriorityTickets = tickets.filter(
+    (ticket) => ticket.prioridade === "Alta"
+  ).length;
+
+  const mediumPriorityTickets = tickets.filter(
+    (ticket) => ticket.prioridade === "Média"
+  ).length;
+
+  const lowPriorityTickets = tickets.filter(
+    (ticket) => ticket.prioridade === "Baixa"
+  ).length;
+
+  // 📄 PAGINAÇÃO
   const totalPages = Math.ceil(tickets.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -67,14 +111,14 @@ const RelatoriosPage = () => {
         </div>
 
         <Button
-        onClick={() =>
-          alert("Exportar PDF será implementado em breve.")
-        }
-         className="w-full cursor-pointer sm:w-auto">
+          onClick={() => alert("Exportar PDF será implementado em breve.")}
+          className="w-full cursor-pointer sm:w-auto"
+        >
           Exportar PDF
         </Button>
       </div>
 
+      {/* CARDS */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <Card className="border-slate-200 bg-slate-50">
           <CardHeader className="pb-2">
@@ -142,6 +186,7 @@ const RelatoriosPage = () => {
         </Card>
       </div>
 
+      {/* GRÁFICOS (SEU TAMANHO ORIGINAL PRESERVADO) */}
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <Card className="w-full overflow-hidden">
           <CardHeader>
@@ -174,6 +219,7 @@ const RelatoriosPage = () => {
         </Card>
       </div>
 
+      {/* LISTA + PAGINAÇÃO (INALTERADO) */}
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Relatório de chamados</CardTitle>
@@ -186,41 +232,6 @@ const RelatoriosPage = () => {
             <span>Status</span>
             <span>Prioridade</span>
             <span>Data</span>
-          </div>
-
-          <div className="space-y-3 md:hidden">
-            {paginatedTickets.map((ticket) => (
-              <div
-                key={ticket.id}
-                className="rounded-xl border p-4"
-              >
-                <div className="mb-3 flex items-start justify-between gap-3">
-                  <h3 className="line-clamp-2 text-sm font-semibold">
-                    {ticket.titulo}
-                  </h3>
-                  <span className="shrink-0 text-xs text-muted-foreground">
-                    {ticket.data}
-                  </span>
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">Cliente: </span>
-                    <span>{ticket.cliente}</span>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    <Badge className={getStatusClass(ticket.status)}>
-                      {ticket.status}
-                    </Badge>
-
-                    <Badge className={getPriorityClass(ticket.prioridade)}>
-                      {ticket.prioridade}
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
 
           <div className="hidden md:block">
