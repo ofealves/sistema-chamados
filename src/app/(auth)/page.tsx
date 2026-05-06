@@ -18,8 +18,8 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
-  email: z.string(), // .email("Digite um e-mail válido"),
-  password: z.string(), // .min(6, "A senha deve ter no mínimo 6 caracteres"),
+  email: z.string(), 
+  password: z.string(),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -130,7 +130,7 @@ const LoginPage = () => {
                     onClick={() =>
                       alert("A recuperação de senha será implementada em breve.")
                     }
-                    className="cursor-pointer text-sm text-muted-foreground hover:text-foreground hover:underline"
+                    className="cursor-pointer text-sm text-muted-foreground hover:text-foreground hover:underline hidden"
                   >
                     Esqueci minha senha
                   </button>
