@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import StatusCharts from "@/components/ui/charts/status-charts";
 import PriorityChart from "@/components/ui/charts/priority-charts";
+import jsPDF from "jspdf";
 
 const itemsPerPage = 5;
 
@@ -19,7 +20,6 @@ const getStatusClass = (status: string) => {
     return "bg-blue-500 text-white hover:bg-blue-500";
   }
 };
-
 const getPriorityClass = (priority: string) => {
   if (priority === "Alta") {
     return "bg-red-100 text-red-700 hover:bg-red-100";
@@ -49,14 +49,14 @@ const RelatoriosPage = () => {
             t.status === "open"
               ? "Aberto"
               : t.status === "in_progress"
-              ? "Em andamento"
-              : "Resolvido",
+                ? "Em andamento"
+                : "Resolvido",
           prioridade:
             t.priority === "high"
               ? "Alta"
               : t.priority === "medium"
-              ? "Média"
-              : "Baixa",
+                ? "Média"
+                : "Baixa",
           data: new Date(t.createdAt).toLocaleDateString(),
         }));
 
@@ -100,6 +100,64 @@ const RelatoriosPage = () => {
   const endIndex = startIndex + itemsPerPage;
   const paginatedTickets = tickets.slice(startIndex, endIndex);
 
+  const exportarPDF = () => {
+    const doc = new jsPDF();
+
+    // Título
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.text("Relatório de Chamados — Nexou", 14, 20);
+
+    // Data
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")}`, 14, 30);
+
+    // Métricas
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Resumo", 14, 45);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Total de chamados: ${totalTickets}`, 14, 55);
+    doc.text(`Em aberto: ${openTickets}`, 14, 62);
+    doc.text(`Em andamento: ${inProgressTickets}`, 14, 69);
+    doc.text(`Resolvidos: ${resolvedTickets}`, 14, 76);
+    doc.text(`Alta prioridade: ${highPriorityTickets}`, 14, 83);
+
+    // Tabela
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Chamados", 14, 98);
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.text("Título", 14, 108);
+    doc.text("Status", 100, 108);
+    doc.text("Prioridade", 140, 108);
+    doc.text("Data", 175, 108);
+
+    doc.line(14, 110, 196, 110);
+
+    doc.setFont("helvetica", "normal");
+    let y = 117;
+
+    tickets.forEach((ticket) => {
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.text(ticket.titulo.substring(0, 40), 14, y);
+      doc.text(ticket.status, 100, y);
+      doc.text(ticket.prioridade, 140, y);
+      doc.text(ticket.data, 175, y);
+      y += 8;
+    });
+
+    doc.save("relatorio-chamados.pdf");
+  };
+
   return (
     <div className="space-y-6 p-4 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -109,11 +167,7 @@ const RelatoriosPage = () => {
             Resumo geral dos chamados e indicadores do sistema
           </p>
         </div>
-
-        <Button
-          onClick={() => alert("Exportar PDF será implementado em breve.")}
-          className="w-full cursor-pointer sm:w-auto"
-        >
+        <Button onClick={exportarPDF} className="w-full cursor-pointer sm:w-auto">
           Exportar PDF
         </Button>
       </div>
