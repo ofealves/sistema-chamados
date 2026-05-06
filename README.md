@@ -41,7 +41,13 @@ O projeto nasceu como frontend com dados mockados e evoluiu para uma aplicação
 - **Zod**
 - **Recharts**
 - **jsPDF**
+- **Axios / Fetch API** para consumo da API REST
 - **Vercel** para deploy
+
+**Integração com:**
+- **Node.js + Express** — API REST própria
+- **MongoDB Atlas** — banco de dados em nuvem
+- **JWT** — autenticação
 
 ---
 
