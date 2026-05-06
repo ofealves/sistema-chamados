@@ -7,23 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const getStatusClass = (status: string) => {
-  if (status === "open") {
-    return "bg-green-500 text-white";
-  } else if (status === "in_progress") {
-    return "bg-yellow-500 text-black";
-  } else {
-    return "bg-blue-500 text-white";
-  }
+  if (status === "open") return "bg-green-500 text-white";
+  if (status === "in_progress") return "bg-yellow-500 text-black";
+  return "bg-blue-500 text-white";
 };
 
 const getPriorityClass = (priority: string) => {
-  if (priority === "high") {
-    return "bg-red-100 text-red-700";
-  } else if (priority === "medium") {
-    return "bg-orange-100 text-orange-700";
-  } else {
-    return "bg-zinc-100 text-zinc-700";
-  }
+  if (priority === "high") return "bg-red-100 text-red-700";
+  if (priority === "medium") return "bg-orange-100 text-orange-700";
+  return "bg-zinc-100 text-zinc-700";
 };
 
 const translateStatus = (status: string) => {
@@ -50,7 +42,6 @@ const ChamadosPage = () => {
     const fetchTickets = async () => {
       try {
         const data = await getTickets();
-        console.log("TICKETS:", data);
         setTickets(data);
       } catch (error) {
         console.error("Erro ao buscar tickets", error);
@@ -135,13 +126,17 @@ const ChamadosPage = () => {
       {/* MOBILE */}
       <div className="space-y-3 md:hidden">
         {sortedTickets.map((ticket) => (
-          <Link
+          <div
             key={ticket._id}
-            href={`/chamados/${ticket._id}`}
-            className="block rounded-xl border p-4 hover:bg-muted/50"
+            className="rounded-xl border p-4 hover:bg-muted/50"
           >
             <div className="flex justify-between mb-2">
-              <h2 className="text-sm font-semibold">{ticket.title}</h2>
+              <Link href={`/chamados/${ticket._id}`}>
+                <h2 className="text-sm font-semibold hover:underline">
+                  {ticket.title}
+                </h2>
+              </Link>
+
               <span className="text-xs">
                 {new Date(ticket.createdAt).toLocaleDateString()}
               </span>
@@ -156,7 +151,7 @@ const ChamadosPage = () => {
                 {translatePriority(ticket.priority)}
               </Badge>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
 
@@ -170,12 +165,13 @@ const ChamadosPage = () => {
         </div>
 
         {sortedTickets.map((ticket) => (
-          <Link
+          <div
             key={ticket._id}
-            href={`/chamados/${ticket._id}`}
-            className="grid grid-cols-5 px-4 py-3 text-sm hover:bg-muted/50"
+            className="grid grid-cols-5 px-4 py-3 text-sm items-center hover:bg-muted/50"
           >
-            <span>{ticket.title}</span>
+            <Link href={`/chamados/${ticket._id}`}>
+              <span className="hover:underline">{ticket.title}</span>
+            </Link>
 
             <span>
               <Badge className={getStatusClass(ticket.status)}>
@@ -192,7 +188,7 @@ const ChamadosPage = () => {
             <span>
               {new Date(ticket.createdAt).toLocaleDateString()}
             </span>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

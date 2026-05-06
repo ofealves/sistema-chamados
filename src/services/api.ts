@@ -1,28 +1,12 @@
 const API_URL = "https://sistema-chamados-backend-production.up.railway.app";
-
-// 🔐 helper pra pegar token
 const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
 
     return {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
     };
 };
-
-// 🔥 helper de erro
-const handleResponse = async (response: Response) => {
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data?.error || "Erro na requisição");
-    }
-
-    return data;
-};
-
-// ================= AUTH =================
-
 export const login = async (email: string, password: string) => {
     const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
@@ -32,7 +16,11 @@ export const login = async (email: string, password: string) => {
         body: JSON.stringify({ email, password }),
     });
 
-    const data = await handleResponse(response);
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data?.error || "Erro ao fazer login");
+    }
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
@@ -53,22 +41,48 @@ export const register = async (
         body: JSON.stringify({ email, password, name }),
     });
 
-    return handleResponse(response);
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data?.error || "Erro ao registrar");
+    }
+
+    return data;
 };
 
-// ================= TICKETS =================
-
-// GET
 export const getTickets = async () => {
     const response = await fetch(`${API_URL}/tickets`, {
         method: "GET",
         headers: getAuthHeaders(),
     });
 
-    return handleResponse(response);
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error("Erro ao buscar tickets");
+    }
+
+    return data;
 };
 
-// CREATE
+export const getTicketById = async (id: string) => {
+    console.log("URL chamada:", `${API_URL}/tickets/${id}`);
+    const response = await fetch(`${API_URL}/tickets/${id}`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+    });
+
+    
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data?.error || "Erro ao buscar ticket");
+    }
+
+    return data;
+};
+
 export const createTicket = async (
     title: string,
     description: string,
@@ -80,26 +94,44 @@ export const createTicket = async (
         body: JSON.stringify({ title, description, priority }),
     });
 
-    return handleResponse(response);
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data?.error || "Erro ao criar ticket");
+    }
+
+    return data;
 };
 
-// 🗑️ DELETE
+export const updateTicket = async (id: string, status: string) => {
+    const response = await fetch(`${API_URL}/tickets/${id}`, {
+        method: "PATCH",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ status }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data?.error || "Erro ao atualizar ticket");
+    }
+
+    return data;
+
+    
+};
+
 export const deleteTicket = async (id: string) => {
     const response = await fetch(`${API_URL}/tickets/${id}`, {
         method: "DELETE",
         headers: getAuthHeaders(),
     });
 
-    return handleResponse(response);
-};
+    const data = await response.json();
 
-// 🔄 UPDATE (status)
-export const updateTicket = async (id: string, status: string) => {
-    const response = await fetch(`${API_URL}/tickets/${id}`, {
-        method: "PUT", // ou PATCH se sua API usar
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ status }),
-    });
+    if (!response.ok) {
+        throw new Error(data?.error || "Erro ao deletar ticket");
+    }
 
-    return handleResponse(response);
+    return data;
 };
