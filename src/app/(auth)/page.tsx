@@ -18,8 +18,13 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
-  email: z.string(), 
-  password: z.string(),
+  email: z
+    .string()
+    .min(1, "O e-mail é obrigatório"),
+  password: z
+    .string()
+    .min(1, "A senha é obrigatória")
+    .min(6, "A senha precisa ter pelo menos 6 caracteres"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
