@@ -28,7 +28,7 @@ export const login = async (email: string, password: string) => {
     return data;
 };
 
-export const register = async (
+export const registers = async (
     email: string,
     password: string,
     name: string
