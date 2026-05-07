@@ -83,7 +83,7 @@ const RegisterPage = () => {
             <CardHeader className="space-y-2">
               <div className="mb-2 lg:hidden">
                 <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
-                  Nexo
+                  Nexou
                 </h1>
                 <p className="text-sm text-zinc-500">Sistema de chamados</p>
               </div>
