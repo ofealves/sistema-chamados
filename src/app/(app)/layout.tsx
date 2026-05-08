@@ -18,16 +18,24 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
   // pega o usuário do localStorage (lado cliente)
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+  const storedUser = localStorage.getItem("user");
 
-    try {
-      if (storedUser && storedUser !== "undefined") {
-        setUser(JSON.parse(storedUser));
+  try {
+    if (storedUser && storedUser !== "undefined") {
+      const parsedUser = JSON.parse(storedUser);
+
+      // 🔥 se vier { user: {...} }
+      if (parsedUser.user) {
+        setUser(parsedUser.user);
+      } else {
+        // 🔥 se vier direto
+        setUser(parsedUser);
       }
-    } catch {
-      console.error("Erro ao ler user do localStorage");
     }
-  }, []);
+  } catch (error) {
+    console.error("Erro ao ler user do localStorage", error);
+  }
+}, []);
 
   const linkClass = (href: string) => {
     const isActive = pathname === href;
