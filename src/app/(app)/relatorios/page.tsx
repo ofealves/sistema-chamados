@@ -20,6 +20,7 @@ const getStatusClass = (status: string) => {
     return "bg-blue-500 text-white hover:bg-blue-500";
   }
 };
+
 const getPriorityClass = (priority: string) => {
   if (priority === "Alta") {
     return "bg-red-100 text-red-700 hover:bg-red-100";
@@ -34,30 +35,35 @@ const RelatoriosPage = () => {
   const [tickets, setTickets] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 🔥 BUSCA DO BACKEND
+  // BUSCAR TICKETS
   useEffect(() => {
     const fetchTickets = async () => {
       try {
         const data = await getTickets();
 
-        // 🔥 CONVERTE pro formato antigo (SEM QUEBRAR UI)
         const formatted = data.map((t: any) => ({
           id: t._id,
+
           titulo: t.title,
-          cliente: "—",
+
+          // 🔥 NOME DO CLIENTE VINDO DO POPULATE
+          cliente: t.userId?.name || "Usuário",
+
           status:
             t.status === "open"
               ? "Aberto"
               : t.status === "in_progress"
                 ? "Em andamento"
                 : "Resolvido",
+
           prioridade:
             t.priority === "high"
               ? "Alta"
               : t.priority === "medium"
                 ? "Média"
                 : "Baixa",
-          data: new Date(t.createdAt).toLocaleDateString(),
+
+          data: new Date(t.createdAt).toLocaleDateString("pt-BR"),
         }));
 
         setTickets(formatted);
@@ -69,10 +75,12 @@ const RelatoriosPage = () => {
     fetchTickets();
   }, []);
 
-  // 📊 MÉTRICAS (AGORA DINÂMICAS)
+  // MÉTRICAS
   const totalTickets = tickets.length;
 
-  const openTickets = tickets.filter((ticket) => ticket.status === "Aberto").length;
+  const openTickets = tickets.filter(
+    (ticket) => ticket.status === "Aberto"
+  ).length;
 
   const inProgressTickets = tickets.filter(
     (ticket) => ticket.status === "Em andamento"
@@ -94,53 +102,63 @@ const RelatoriosPage = () => {
     (ticket) => ticket.prioridade === "Baixa"
   ).length;
 
-  // 📄 PAGINAÇÃO
+  // PAGINAÇÃO
   const totalPages = Math.ceil(tickets.length / itemsPerPage);
+
   const startIndex = (currentPage - 1) * itemsPerPage;
+
   const endIndex = startIndex + itemsPerPage;
+
   const paginatedTickets = tickets.slice(startIndex, endIndex);
 
+  // EXPORTAR PDF
   const exportarPDF = () => {
     const doc = new jsPDF();
 
-    // Título
+    // TÍTULO
     doc.setFontSize(20);
     doc.setFont("helvetica", "bold");
     doc.text("Relatório de Chamados — Nexou", 14, 20);
 
-    // Data
+    // DATA
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")}`, 14, 30);
+    doc.text(
+      `Gerado em: ${new Date().toLocaleDateString("pt-BR")}`,
+      14,
+      30
+    );
 
-    // Métricas
+    // RESUMO
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.text("Resumo", 14, 45);
 
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
+
     doc.text(`Total de chamados: ${totalTickets}`, 14, 55);
     doc.text(`Em aberto: ${openTickets}`, 14, 62);
     doc.text(`Em andamento: ${inProgressTickets}`, 14, 69);
     doc.text(`Resolvidos: ${resolvedTickets}`, 14, 76);
     doc.text(`Alta prioridade: ${highPriorityTickets}`, 14, 83);
 
-    // Tabela
+    // TABELA
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.text("Chamados", 14, 98);
 
     doc.setFontSize(9);
-    doc.setFont("helvetica", "bold");
+
     doc.text("Título", 14, 108);
-    doc.text("Status", 100, 108);
-    doc.text("Prioridade", 140, 108);
-    doc.text("Data", 175, 108);
+    doc.text("Cliente", 70, 108);
+    doc.text("Status", 115, 108);
+    doc.text("Prioridade", 150, 108);
 
     doc.line(14, 110, 196, 110);
 
     doc.setFont("helvetica", "normal");
+
     let y = 117;
 
     tickets.forEach((ticket) => {
@@ -148,10 +166,15 @@ const RelatoriosPage = () => {
         doc.addPage();
         y = 20;
       }
-      doc.text(ticket.titulo.substring(0, 40), 14, y);
-      doc.text(ticket.status, 100, y);
-      doc.text(ticket.prioridade, 140, y);
-      doc.text(ticket.data, 175, y);
+
+      doc.text(ticket.titulo.substring(0, 28), 14, y);
+
+      doc.text(ticket.cliente.substring(0, 18), 70, y);
+
+      doc.text(ticket.status, 115, y);
+
+      doc.text(ticket.prioridade, 150, y);
+
       y += 8;
     });
 
@@ -162,12 +185,19 @@ const RelatoriosPage = () => {
     <div className="space-y-6 p-4 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold sm:text-3xl">Relatórios</h1>
+          <h1 className="text-2xl font-bold sm:text-3xl">
+            Relatórios
+          </h1>
+
           <p className="text-sm text-muted-foreground sm:text-base">
             Resumo geral dos chamados e indicadores do sistema
           </p>
         </div>
-        <Button onClick={exportarPDF} className="w-full cursor-pointer sm:w-auto">
+
+        <Button
+          onClick={exportarPDF}
+          className="w-full cursor-pointer sm:w-auto"
+        >
           Exportar PDF
         </Button>
       </div>
@@ -180,6 +210,7 @@ const RelatoriosPage = () => {
               Total de Chamados
             </CardTitle>
           </CardHeader>
+
           <CardContent>
             <p className="text-2xl font-bold text-slate-800 sm:text-3xl">
               {totalTickets}
@@ -193,6 +224,7 @@ const RelatoriosPage = () => {
               Em aberto
             </CardTitle>
           </CardHeader>
+
           <CardContent>
             <p className="text-2xl font-bold text-green-800 sm:text-3xl">
               {openTickets}
@@ -206,6 +238,7 @@ const RelatoriosPage = () => {
               Em andamento
             </CardTitle>
           </CardHeader>
+
           <CardContent>
             <p className="text-2xl font-bold text-amber-800 sm:text-3xl">
               {inProgressTickets}
@@ -219,6 +252,7 @@ const RelatoriosPage = () => {
               Resolvidos
             </CardTitle>
           </CardHeader>
+
           <CardContent>
             <p className="text-2xl font-bold text-blue-800 sm:text-3xl">
               {resolvedTickets}
@@ -232,6 +266,7 @@ const RelatoriosPage = () => {
               Alta prioridade
             </CardTitle>
           </CardHeader>
+
           <CardContent>
             <p className="text-2xl font-bold text-red-800 sm:text-3xl">
               {highPriorityTickets}
@@ -240,12 +275,15 @@ const RelatoriosPage = () => {
         </Card>
       </div>
 
-      {/* GRÁFICOS (SEU TAMANHO ORIGINAL PRESERVADO) */}
+      {/* GRÁFICOS */}
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <Card className="w-full overflow-hidden">
           <CardHeader>
-            <CardTitle className="text-xl">Status dos Chamados</CardTitle>
+            <CardTitle className="text-xl">
+              Status dos Chamados
+            </CardTitle>
           </CardHeader>
+
           <CardContent>
             <div className="h-65 w-full sm:h-80">
               <StatusCharts
@@ -259,8 +297,11 @@ const RelatoriosPage = () => {
 
         <Card className="w-full overflow-hidden">
           <CardHeader>
-            <CardTitle className="text-xl">Prioridade dos Chamados</CardTitle>
+            <CardTitle className="text-xl">
+              Prioridade dos Chamados
+            </CardTitle>
           </CardHeader>
+
           <CardContent>
             <div className="h-65 w-full sm:h-80">
               <PriorityChart
@@ -273,7 +314,7 @@ const RelatoriosPage = () => {
         </Card>
       </div>
 
-      {/* LISTA + PAGINAÇÃO (INALTERADO) */}
+      {/* LISTAGEM */}
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Relatório de chamados</CardTitle>
@@ -294,20 +335,26 @@ const RelatoriosPage = () => {
                 key={ticket.id}
                 className="grid grid-cols-[2fr_1.2fr_1.2fr_1fr_1fr] items-center gap-3 border-b py-3 last:border-b-0"
               >
-                <span className="truncate font-medium">{ticket.titulo}</span>
+                <span className="truncate font-medium">
+                  {ticket.titulo}
+                </span>
+
                 <span className="truncate text-sm text-muted-foreground">
                   {ticket.cliente}
                 </span>
+
                 <span>
                   <Badge className={getStatusClass(ticket.status)}>
                     {ticket.status}
                   </Badge>
                 </span>
+
                 <span>
                   <Badge className={getPriorityClass(ticket.prioridade)}>
                     {ticket.prioridade}
                   </Badge>
                 </span>
+
                 <span className="text-sm text-muted-foreground">
                   {ticket.data}
                 </span>
@@ -315,6 +362,7 @@ const RelatoriosPage = () => {
             ))}
           </div>
 
+          {/* PAGINAÇÃO */}
           <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
               Página {currentPage} de {totalPages}
@@ -333,7 +381,11 @@ const RelatoriosPage = () => {
               {Array.from({ length: totalPages }, (_, index) => (
                 <Button
                   key={index + 1}
-                  variant={currentPage === index + 1 ? "default" : "outline"}
+                  variant={
+                    currentPage === index + 1
+                      ? "default"
+                      : "outline"
+                  }
                   onClick={() => setCurrentPage(index + 1)}
                   size="sm"
                 >
