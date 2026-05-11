@@ -1,8 +1,11 @@
 'use client'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
-import { getTickets } from "@/services/api";
+import { getTickets, createTicket } from "@/services/api";
 
 const getStatusClass = (status: string) => {
   if (status === "open") return "bg-green-500 text-white hover:bg-green-500";
@@ -30,6 +33,11 @@ const translatePriority = (priority: string) => {
 
 export default function DashboardPage() {
   const [tickets, setTickets] = useState<any[]>([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("medium");
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     getTickets().then(data => setTickets(data));
@@ -46,6 +54,24 @@ export default function DashboardPage() {
   const recentTickets = [...tickets]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
+
+  const handleQuickCreate = async () => {
+    if (!title.trim() || !description.trim()) return;
+    setSubmitting(true);
+    try {
+      const newTicket = await createTicket(title, description, priority);
+      setTickets(prev => [newTicket, ...prev]);
+      setTitle("");
+      setDescription("");
+      setPriority("medium");
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (error) {
+      console.error("Erro ao criar ticket", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="space-y-6 p-4 md:p-6">
@@ -187,21 +213,39 @@ export default function DashboardPage() {
 
         <Card className="h-fit">
           <CardHeader>
-            <CardTitle className="text-base md:text-lg">Status dos Chamados</CardTitle>
+            <CardTitle className="text-base md:text-lg">Novo chamado rápido</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
-              <span className="font-medium">Aberto</span>
-              <Badge className="bg-green-500 text-white hover:bg-green-500">{openTickets}</Badge>
-            </div>
-            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
-              <span className="font-medium">Em andamento</span>
-              <Badge className="bg-yellow-500 text-black hover:bg-yellow-500">{inProgressTickets}</Badge>
-            </div>
-            <div className="flex items-center justify-between rounded-lg border px-3 py-2.5">
-              <span className="font-medium">Resolvido</span>
-              <Badge className="bg-blue-500 text-white hover:bg-blue-500">{resolvedTickets}</Badge>
-            </div>
+            {success && (
+              <p className="text-sm text-green-600 font-medium">✅ Chamado criado com sucesso!</p>
+            )}
+            <Input
+              placeholder="Título"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Textarea
+              placeholder="Descrição"
+              className="min-h-20 resize-none"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              className="w-full rounded-md border px-3 py-2 text-sm"
+            >
+              <option value="low">Baixa</option>
+              <option value="medium">Média</option>
+              <option value="high">Alta</option>
+            </select>
+            <Button
+              className="w-full"
+              onClick={handleQuickCreate}
+              disabled={submitting || !title.trim() || !description.trim()}
+            >
+              {submitting ? "Criando..." : "Criar chamado"}
+            </Button>
           </CardContent>
         </Card>
       </div>
