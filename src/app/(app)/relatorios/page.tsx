@@ -329,6 +329,22 @@ const RelatoriosPage = () => {
             <span>Data</span>
           </div>
 
+          <div className="space-y-3 md:hidden">
+            {paginatedTickets.map((ticket) => (
+              <div key={ticket.id} className="rounded-xl border p-4">
+                <div className="flex justify-between mb-2">
+                  <h2 className="text-sm font-semibold">{ticket.titulo}</h2>
+                  <span className="text-xs text-muted-foreground">{ticket.data}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mb-2">{ticket.cliente}</p>
+                <div className="flex gap-2">
+                  <Badge className={getStatusClass(ticket.status)}>{ticket.status}</Badge>
+                  <Badge className={getPriorityClass(ticket.prioridade)}>{ticket.prioridade}</Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+
           <div className="hidden md:block">
             {paginatedTickets.map((ticket) => (
               <div
