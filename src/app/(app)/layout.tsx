@@ -18,33 +18,32 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
   // pega o usuário do localStorage (lado cliente)
   useEffect(() => {
-  const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
 
-  try {
-    if (storedUser && storedUser !== "undefined") {
-      const parsedUser = JSON.parse(storedUser);
+    try {
+      if (storedUser && storedUser !== "undefined") {
+        const parsedUser = JSON.parse(storedUser);
 
-      // 🔥 se vier { user: {...} }
-      if (parsedUser.user) {
-        setUser(parsedUser.user);
-      } else {
-        // 🔥 se vier direto
-        setUser(parsedUser);
+        // 🔥 se vier { user: {...} }
+        if (parsedUser.user) {
+          setUser(parsedUser.user);
+        } else {
+          // 🔥 se vier direto
+          setUser(parsedUser);
+        }
       }
+    } catch (error) {
+      console.error("Erro ao ler user do localStorage", error);
     }
-  } catch (error) {
-    console.error("Erro ao ler user do localStorage", error);
-  }
-}, []);
+  }, []);
 
   const linkClass = (href: string) => {
     const isActive = pathname === href;
 
-    return `rounded-lg px-3 py-2 text-sm font-medium transition ${
-      isActive
+    return `rounded-lg px-3 py-2 text-sm font-medium transition ${isActive
         ? "bg-zinc-800 text-white"
         : "text-zinc-200 hover:bg-zinc-800 hover:text-white"
-    }`;
+      }`;
   };
 
   const getInitials = (name?: string) => {
@@ -102,6 +101,12 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
               <Link href="/relatorios" className={linkClass("/relatorios")}>
                 Relatórios
               </Link>
+
+              {user?.role === "admin" && (
+                <Link href="/logs" className={linkClass("/logs")}>
+                  Logs
+                </Link>
+              )}
 
               <Link href="/novo" className={linkClass("/novo")}>
                 Novo chamado

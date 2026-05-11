@@ -135,3 +135,18 @@ export const deleteTicket = async (id: string) => {
 
     return data;
 };
+
+export const getLogs = async () => {
+    const response = await fetch(`${API_URL}/logs`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error("Erro ao buscar logs");
+    }
+
+    return data;
+};
