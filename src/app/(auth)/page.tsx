@@ -80,7 +80,7 @@ const LoginPage = () => {
 
               <CardTitle className="text-2xl text-zinc-900">Entrar</CardTitle>
               <CardDescription className="text-zinc-500">
-                Experimente agora sem cadastro clique em Entrar
+                Faça login para acessar a plataforma
               </CardDescription>
             </CardHeader>
 
