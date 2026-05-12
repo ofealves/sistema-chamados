@@ -20,6 +20,18 @@ const getActionClass = (action: string) => {
     return "bg-zinc-100 text-zinc-700";
 };
 
+const formatDate = (date: string) => {
+    if (!date) return "Data inválida";
+
+    const parsedDate = new Date(date);
+
+    if (isNaN(parsedDate.getTime())) {
+        return "Data inválida";
+    }
+
+    return parsedDate.toLocaleString("pt-BR");
+};
+
 const LogsPage = () => {
     const router = useRouter();
     const [logs, setLogs] = useState<any[]>([]);
@@ -57,7 +69,7 @@ const LogsPage = () => {
                 </p>
             </div>
 
-            <Card>
+            <Card className="w-full">
                 <CardHeader>
                     <CardTitle className="text-base">{logs.length} registros encontrados</CardTitle>
                 </CardHeader>
@@ -87,8 +99,8 @@ const LogsPage = () => {
                     </div>
 
                     {/* DESKTOP */}
-                    <div className="hidden md:block overflow-x-auto">
-                        <table className="w-full text-sm">
+                    <div className="hidden w-full md:block overflow-x-auto">
+                        <table className="w-full min-w-300 text-sm">
                             <thead>
                                 <tr className="border-b bg-muted/50">
                                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Ação</th>
@@ -117,7 +129,7 @@ const LogsPage = () => {
                                             {log.details}
                                         </td>
                                         <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
-                                            {new Date(log.createdAt).toLocaleString("pt-BR")}
+                                            {formatDate(log.createdAt)}
                                         </td>
                                     </tr>
                                 ))}
