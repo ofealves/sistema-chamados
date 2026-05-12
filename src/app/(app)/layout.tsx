@@ -41,8 +41,8 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
     const isActive = pathname === href;
 
     return `rounded-lg px-3 py-2 text-sm font-medium transition ${isActive
-        ? "bg-zinc-800 text-white"
-        : "text-zinc-200 hover:bg-zinc-800 hover:text-white"
+      ? "bg-zinc-800 text-white"
+      : "text-zinc-200 hover:bg-zinc-800 hover:text-white"
       }`;
   };
 
@@ -182,6 +182,16 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                   >
                     Relatórios
                   </Link>
+
+                  {user?.role === "admin" && (
+                    <Link
+                      href="/logs"
+                      className={linkClass("/logs")}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Logs
+                    </Link>
+                  )}
 
                   <Link
                     href="/novo"
