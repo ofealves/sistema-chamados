@@ -20,6 +20,8 @@ const getActionClass = (action: string) => {
     return "bg-zinc-100 text-zinc-700";
 };
 
+
+
 const formatDate = (date: string) => {
     if (!date) return "Data inválida";
 
@@ -73,7 +75,7 @@ const LogsPage = () => {
                 <CardHeader>
                     <CardTitle className="text-base">{logs.length} registros encontrados</CardTitle>
                 </CardHeader>
-                <CardContent className="p-0">
+                <CardContent className="overflow-hidden p-0">
 
                     {/* MOBILE */}
                     <div className="space-y-3 p-4 md:hidden">
@@ -84,7 +86,7 @@ const LogsPage = () => {
                                         {translateAction(log.action)}
                                     </Badge>
                                     <span className="text-xs text-muted-foreground">
-                                        {new Date(log.createdAt).toLocaleString("pt-BR")}
+                                        {formatDate(log.createdAt)}
                                     </span>
                                 </div>
                                 <p className="text-sm font-medium">{log.details}</p>
