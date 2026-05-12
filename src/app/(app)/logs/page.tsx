@@ -94,7 +94,7 @@ const LogsPage = () => {
                                     Por: {log.userId?.name || "—"} ({log.userId?.email || "—"})
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                    Ticket: {log.ticketId?.title || "removido"}
+                                    Ticket: {log.ticketTitle || "removido"}
                                 </p>
                             </div>
                         ))}
