@@ -125,7 +125,7 @@ const LogsPage = () => {
                                             <p className="text-xs text-muted-foreground">{log.userId?.email || "—"}</p>
                                         </td>
                                         <td className="px-4 py-3 text-muted-foreground">
-                                            {log.ticketId?.title || "removido"}
+                                            {log.ticketTitle || "removido"}
                                         </td>
                                         <td className="px-4 py-3 text-muted-foreground">
                                             {log.details}
